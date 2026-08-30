@@ -1,0 +1,17 @@
+{
+    "name": "libqoi",
+    "description": "QOI image decoder",
+    "filters":["qoidec"],
+    "help": "This filter decodes QOI (\"Quite OK Image Format\") images using qoi.h.",
+    "support": [
+        "image"
+    ],
+    "sources":"https://bevara.ddns.net/sources/libqoi.accessor",
+    "filter_source":{
+        "qoidec" : "dec_qoi.c"
+    },
+    "extension":{
+      "qoi" : "img"
+    },
+    "licence_required":false
+}
