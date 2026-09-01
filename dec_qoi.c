@@ -49,6 +49,12 @@ static GF_Err qoidec_configure_pid(GF_Filter *filter, GF_FilterPid *pid, Bool is
 
 	gf_filter_pid_set_property(ctx->opid, GF_PROP_PID_STREAM_TYPE, &PROP_UINT(GF_STREAM_VISUAL));
 	gf_filter_pid_set_property(ctx->opid, GF_PROP_PID_CODECID, &PROP_UINT(GF_CODECID_RAW));
+	/* PIXFMT must be set here, not just after decode in process(): GPAC's
+	 * output filter resolution needs it on the PID before any data flows,
+	 * or connection fails with "No suitable filter to adapt caps" even
+	 * though the value gets overwritten (RGB vs RGBA, once desc.channels
+	 * is known) once decoding actually starts - same fix as dec_bpg.c. */
+	gf_filter_pid_set_property(ctx->opid, GF_PROP_PID_PIXFMT, &PROP_UINT(GF_PIXEL_RGB));
 
 	return GF_OK;
 }
@@ -157,7 +163,7 @@ GF_FilterRegister QOIDecoderRegister = {
 	.finalize = qoidec_finalize,
 };
 
-const GF_FilterRegister * EMSCRIPTEN_KEEPALIVE dynCall_qoidec_register(GF_FilterSession *session)
+const GF_FilterRegister * EMSCRIPTEN_KEEPALIVE qoidec_register(GF_FilterSession *session)
 {
 	return &QOIDecoderRegister;
 }
@@ -165,5 +171,5 @@ const GF_FilterRegister * EMSCRIPTEN_KEEPALIVE dynCall_qoidec_register(GF_Filter
 #include "filter_register.h"
 __attribute__((constructor))
 void register_qoidec(void) {
-    gf_filter_auto_register("qoidec", dynCall_qoidec_register);
+    gf_filter_auto_register("qoidec", qoidec_register);
 }
