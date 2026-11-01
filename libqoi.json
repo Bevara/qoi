@@ -14,5 +14,5 @@
       "qoi" : "img"
     },
     "licence_required":false,
-    "using": ["solver_minimal_1", "solver_1"]
+    "using": ["mm_solver_minimal_1.0.1", "mm_solver_1.0.1"]
 }
